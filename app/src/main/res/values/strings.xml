@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">ExpensrApp</string>
+    <string name="app_name">Expensr</string>
+    <string name="app_name_title">E x p e n s r</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

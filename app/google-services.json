@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "32066364896",
+    "firebase_url": "https://expensr-82738.firebaseio.com",
+    "project_id": "expensr-82738",
+    "storage_bucket": "expensr-82738.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:32066364896:android:90e9f9a63e789d04",
+        "android_client_info": {
+          "package_name": "com.apps.salilgokhale.expensrapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "32066364896-11nsfq0ml7ni05i8131aq7h4pmvnvlmb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.apps.salilgokhale.expensrapp",
+            "certificate_hash": "250A3C3F0876D8F56D4919398A903162D66137B2"
+          }
+        },
+        {
+          "client_id": "32066364896-hcfcg046hua4ljf1ep4e6e61dkteviun.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgkRBPs2OUXI6GiYSrWhfzugM3jT2Aulo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "32066364896-hcfcg046hua4ljf1ep4e6e61dkteviun.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

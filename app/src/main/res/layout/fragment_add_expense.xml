@@ -1,0 +1,91 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.apps.salilgokhale.expensrapp.AddExpenseFragment">
+
+
+    <LinearLayout
+        android:id="@+id/button_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:id="@+id/row_1"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+
+               <Button
+                   android:id="@+id/hotel_button"
+                   android:gravity="left"
+                   android:layout_width="100dp"
+                   android:layout_height="100dp"
+                   android:background="@drawable/hotel_button"/>
+
+                <Button
+                    android:id="@+id/phone_button"
+                    android:gravity="right"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/phone_button"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/row_2"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/train_button"
+                android:gravity="left"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/train_button"/>
+
+            <Button
+                android:id="@+id/taxi_button"
+                android:gravity="right"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/taxi_button"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/row_3"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/subs_button"
+                android:gravity="left"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/subs_button"/>
+
+            <Button
+                android:id="@+id/dinner_button"
+                android:gravity="right"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/dinner_button"/>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+</FrameLayout>
