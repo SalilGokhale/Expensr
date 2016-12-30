@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:background="@color/windowBackground"
+    android:focusableInTouchMode="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:id="@+id/add_batch_title"
+            android:gravity="center_vertical"
+            android:text="@string/add_batch"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/add_batch_name_layout"
+            android:layout_width="match_parent"
+            android:paddingTop="15dp"
+            android:layout_height="65dp"
+            android:textColorHint="@color/colorUnselected">
+
+            <EditText
+                android:id="@+id/add_batch_et"
+                android:theme="@style/TextLabel"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Batch Name"/>
+        </android.support.design.widget.TextInputLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="52dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingRight="8dp">
+
+        <Button
+            android:id="@+id/cancel_action"
+            android:text="@string/cancel_action"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/windowBackground"
+            android:gravity="center"
+            android:layout_toLeftOf="@+id/create_action"
+            android:layout_width="70dp"
+            android:stateListAnimator="@null"
+            android:layout_height="match_parent"
+            android:onClick="onCancelFDialog"/>
+
+        <Button
+            android:id="@+id/create_action"
+            android:text="@string/create_action"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:layout_alignParentRight="true"
+            android:stateListAnimator="@null"
+            android:background="@color/windowBackground"
+            android:layout_gravity="right"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:onClick="onChooseFields"/>
+
+
+    </RelativeLayout>
+
+
+
+
+
+
+
+
+
+    </LinearLayout>

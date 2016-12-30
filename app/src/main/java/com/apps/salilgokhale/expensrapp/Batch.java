@@ -1,6 +1,7 @@
 package com.apps.salilgokhale.expensrapp;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Created by salilgokhale on 25/12/2016.
@@ -9,15 +10,17 @@ import java.util.Date;
 public class Batch {
 
     private String name;
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
     private int expenseTotal;
     private boolean sap;
     private boolean bag;
+    private String lastAddedTo;
+    private Map<String, Object> matchingExpenses;
 
     public Batch () {}
 
-    public Batch (String name, Date startDate, Date endDate, int expenseTotal, boolean sap, boolean bag){
+    public Batch (String name, String startDate, String endDate, int expenseTotal, boolean sap, boolean bag){
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -50,19 +53,19 @@ public class Batch {
         return sap;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
@@ -74,4 +77,19 @@ public class Batch {
         return expenseTotal;
     }
 
+    public Map<String, Object> getMatchingExpenses() {
+        return matchingExpenses;
+    }
+
+    public void setMatchingExpenses(Map<String, Object> matchingExpenses) {
+        this.matchingExpenses = matchingExpenses;
+    }
+
+    public String getLastAddedTo() {
+        return lastAddedTo;
+    }
+
+    public void setLastAddedTo(String lastAddedTo) {
+        this.lastAddedTo = lastAddedTo;
+    }
 }

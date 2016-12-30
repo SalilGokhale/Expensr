@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="4dp"
+    android:padding="@dimen/cardview_padding"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            >
+
+            <com.apps.salilgokhale.expensrapp.CustomTextView.BatchTextView
+                android:id="@+id/batch_name_cv"
+                android:text="test"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:gravity="center_vertical|left"
+
+                />
+
+            <ImageView
+                android:id="@+id/sap_cv"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/bag_cv"
+                android:padding="10dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/cardLowerText"
+                android:id="@+id/batch_dates_cv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:gravity="left|center_vertical"/>
+
+            <TextView
+                style="@style/cardLowerText"
+                android:id="@+id/total_exp_cv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <TextView
+                style="@style/cardLowerText"
+                android:text="SAP"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <TextView
+                style="@style/cardLowerText"
+                android:text="Bag"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

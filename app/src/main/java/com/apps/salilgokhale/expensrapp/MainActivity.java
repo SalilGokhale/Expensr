@@ -1,5 +1,7 @@
 package com.apps.salilgokhale.expensrapp;
 
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -9,6 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.apps.salilgokhale.expensrapp.CustomTextView.ToolbarTextView;
 import com.google.firebase.database.ChildEventListener;
@@ -24,29 +29,35 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    private FirebaseDatabase mFirebaseDatabase; // the database - main acces
-    private DatabaseReference mDatabaseReference; // class that references specific part of the database
-    private ChildEventListener mChildEventListener;
+public class MainActivity extends AppCompatActivity implements MainView, DatePickerFragment.OnDateSelectedListener, AddBatchDialogFragment.OnBatchCreatedListener {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ToolbarTextView mTitle;
 
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+
+    private MainActivityPresenterImpl presenter;
+
     private int[] tabIcons = {
             R.drawable.ic_library_add_white_36dp,
             R.drawable.ic_purchase_order_96
     };
 
-    //private FirebaseAuth mFirebaseAuth;
-    //private FirebaseAuth.AuthStateListener mAuthStateListener;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Butterknife
+        ButterKnife.bind(this);
+
+        // Toolbar set up
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -55,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         mTitle = (ToolbarTextView) findViewById(R.id.toolbar_title);
         mTitle.setText(R.string.app_name_title);
 
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // Tab set up
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -64,10 +75,20 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mFirebaseDatabase.getReference().child("expenses");
+        // Presenter set up
 
-        //mFirebaseAuth = FirebaseAuth.getInstance();
+        presenter = new MainActivityPresenterImpl(this);
+
+        // Fab set up
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddBatchDialogFragment batchDialogFragment = AddBatchDialogFragment.newInstance();
+                batchDialogFragment.show(getSupportFragmentManager(), "aB");
+                batchDialogFragment.setCancelable(true);
+            }
+        });
 
     }
 
@@ -76,11 +97,46 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager(final ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new AddExpenseFragment(), "ONE");
         adapter.addFragment(new BatchesFragment(), "TWO");
         viewPager.setAdapter(adapter);
+
+        final ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 1:
+                        setFloatingActionButttonVisible(true);
+                        break;
+
+                    default:
+                        setFloatingActionButttonVisible(false);
+                        break;
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        };
+
+        viewPager.addOnPageChangeListener(onPageChangeListener);
+
+        /*viewPager.post(new Runnable() {
+            @Override
+            public void run() {
+                onPageChangeListener.onPageSelected(viewPager.getCurrentItem());
+            }
+        }); */
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -111,6 +167,51 @@ public class MainActivity extends AppCompatActivity {
             return null;
             //return mFragmentTitleList.get(position);
         }
+    }
+
+    public void setFloatingActionButttonVisible(boolean visible) {
+        //CoordinatorLayout fabLayout = (CoordinatorLayout) fab.getParent();
+        if(visible) {
+            //fabLayout.setVisibility(View.VISIBLE);
+            fab.show();
+            //}else if(fabLayout.getVisibility()==View.VISIBLE){
+        } else {
+            fab.hide();
+        }
+    }
+
+    @Override
+    public void onDateSelected(String userinput){
+
+        ((AddExpenseFragment) ((ViewPagerAdapter) viewPager.getAdapter()).getItem(0)).updateDateTVs(userinput);
+
+    }
+
+    @Override
+    public void createBatch(String batchName) {
+        presenter.createBatch(batchName);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
     }
 
     /*
