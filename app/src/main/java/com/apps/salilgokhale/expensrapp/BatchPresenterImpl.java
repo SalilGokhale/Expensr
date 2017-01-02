@@ -39,8 +39,9 @@ public class BatchPresenterImpl implements BatchPresenter {
         batchQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (batchView != null)
+                if (batchView != null) {
                     ((BatchesFragment) batchView).getmAdapter().addItem(dataSnapshot.getValue(Batch.class));
+                }
             }
 
             @Override

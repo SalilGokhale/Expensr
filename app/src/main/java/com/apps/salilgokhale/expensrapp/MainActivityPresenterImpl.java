@@ -21,23 +21,31 @@ public class MainActivityPresenterImpl implements MainActivityPresenter{
     private FirebaseDatabase mFirebaseDatabase; // the database - main access point
     private DatabaseReference mDatabaseReference; // class that references specific part of the database
 
-    private List<Batch> activeBatches;
-
-
     public MainActivityPresenterImpl(MainView mainView) {
 
         this.mainView = mainView;
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mFirebaseDatabase.getReference();
+        mDatabaseReference = mFirebaseDatabase.getReference().child("batches");
 
-        // find all batches which have not been submitted in SAP and list according to most recently updated.
     }
 
     @Override
-    public void createBatch(String batchName){
+    public void createBatch(String batchName, boolean newB, int i){
         Batch batch = new Batch(batchName, "", "", 0, false, false);
-        mDatabaseReference.child("batches").push().setValue(batch);
+        DatabaseReference db = mDatabaseReference.push();
+        db.setValue(batch);
+
+        if (newB){
+            String batchID = db.getKey();
+
+            if (mainView != null){
+
+                ((AddExpenseFragment)((MainActivity.ViewPagerAdapter)((MainActivity) mainView).
+                        getViewPager().getAdapter()).getItem(0)).getButtonPresenter().onButtonClicked(i, batchID);
+
+            }
+        }
     }
 
     @Override

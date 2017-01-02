@@ -79,7 +79,7 @@ public class BatchesAdapter extends RecyclerView.Adapter<BatchesAdapter.ViewHold
                 String date2date = temp.getStartDate() + " - " + temp.getEndDate();
                 holder.mBatchDateTV.setText(date2date);
             }
-            String batchTotal = String.valueOf(temp.getExpenseTotal()) + " Total";
+            String batchTotal = String.valueOf(temp.getTotal()) + " Total";
             holder.mBatchTotalTV.setText(batchTotal);
             if (temp.isSap()) {
                 holder.mSAP.setImageResource(R.drawable.sap_green);

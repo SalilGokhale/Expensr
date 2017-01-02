@@ -8,7 +8,9 @@ public interface ButtonPresenter {
 
     void onDestroy();
 
-    void onButtonClicked(int i);
+    void onButtonClicked(int i, String batchID);
+
+    public void onButtonAddBatch(int i);
 
     void retrieveActiveBatches();
 }

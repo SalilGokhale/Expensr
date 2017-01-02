@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements MainView, DatePic
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
+    // Snackbar variable
+    @BindView(R.id.coordinator_layout) CoordinatorLayout coordinatorLayout;
+
     private MainActivityPresenterImpl presenter;
 
     private int[] tabIcons = {
@@ -84,9 +87,7 @@ public class MainActivity extends AppCompatActivity implements MainView, DatePic
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddBatchDialogFragment batchDialogFragment = AddBatchDialogFragment.newInstance();
-                batchDialogFragment.show(getSupportFragmentManager(), "aB");
-                batchDialogFragment.setCancelable(true);
+                showAddBatchDialog(false, 0);
             }
         });
 
@@ -169,6 +170,10 @@ public class MainActivity extends AppCompatActivity implements MainView, DatePic
         }
     }
 
+    public ViewPager getViewPager() {
+        return viewPager;
+    }
+
     public void setFloatingActionButttonVisible(boolean visible) {
         //CoordinatorLayout fabLayout = (CoordinatorLayout) fab.getParent();
         if(visible) {
@@ -188,8 +193,18 @@ public class MainActivity extends AppCompatActivity implements MainView, DatePic
     }
 
     @Override
-    public void createBatch(String batchName) {
-        presenter.createBatch(batchName);
+    public void createBatch(String batchName, boolean newBat, int i) {
+        presenter.createBatch(batchName, newBat, i);
+    }
+
+    public void showAddBatchDialog(boolean newBatch, int i){
+        AddBatchDialogFragment batchDialogFragment = AddBatchDialogFragment.newInstance(newBatch, i);
+        batchDialogFragment.show(getSupportFragmentManager(), "aB");
+        batchDialogFragment.setCancelable(true);
+    }
+
+    public CoordinatorLayout getCoordinatorLayout() {
+        return coordinatorLayout;
     }
 
     @Override

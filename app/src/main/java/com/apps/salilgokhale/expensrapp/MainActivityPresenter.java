@@ -8,5 +8,5 @@ public interface MainActivityPresenter {
 
     void onDestroy();
 
-    void createBatch(String batchName);
+    void createBatch(String batchName, boolean newB, int i);
 }

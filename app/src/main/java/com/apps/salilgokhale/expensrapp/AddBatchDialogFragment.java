@@ -27,15 +27,21 @@ public class AddBatchDialogFragment extends DialogFragment {
     @BindView(R.id.add_batch_et) EditText addBatchET;
     private Unbinder unbinder;
 
+    // private variables
+    public boolean newBatch;
+    public int buttonID;
+
     // Container Activity must implement this interface
     public interface OnBatchCreatedListener {
-        public void createBatch(String batchName);
+        public void createBatch(String batchName, boolean newBa, int buttonI);
     }
 
     public AddBatchDialogFragment(){}
 
-    public static AddBatchDialogFragment newInstance() {
+    public static AddBatchDialogFragment newInstance(boolean newBatch, int i) {
         AddBatchDialogFragment f = new AddBatchDialogFragment();
+        f.newBatch = newBatch;
+        f.buttonID = i;
         return f;
     }
 
@@ -68,7 +74,7 @@ public class AddBatchDialogFragment extends DialogFragment {
                 }
                 else {
                     Log.d("Create Batch Button", "pressed");
-                    mCallback.createBatch(addBatchET.getText().toString());
+                    mCallback.createBatch(addBatchET.getText().toString(), newBatch, buttonID);
                     closeDialog();
                 }
 

@@ -1,5 +1,7 @@
 package com.apps.salilgokhale.expensrapp;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.Date;
 import java.util.Map;
 
@@ -9,10 +11,13 @@ import java.util.Map;
 
 public class Batch {
 
+    @Exclude
+    public String key;
+
     private String name;
     private String startDate;
     private String endDate;
-    private int expenseTotal;
+    private int total;
     private boolean sap;
     private boolean bag;
     private String lastAddedTo;
@@ -24,7 +29,7 @@ public class Batch {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.expenseTotal = expenseTotal;
+        this.total = expenseTotal;
         this.sap = sap;
         this.bag = bag;
     }
@@ -69,12 +74,12 @@ public class Batch {
         return endDate;
     }
 
-    public void setExpenseTotal(int expenseTotal) {
-        this.expenseTotal = expenseTotal;
+    public int getTotal() {
+        return total;
     }
 
-    public int getExpenseTotal() {
-        return expenseTotal;
+    public void setTotal(int total) {
+        this.total = total;
     }
 
     public Map<String, Object> getMatchingExpenses() {
@@ -91,5 +96,15 @@ public class Batch {
 
     public void setLastAddedTo(String lastAddedTo) {
         this.lastAddedTo = lastAddedTo;
+    }
+
+    @Exclude
+    public String getKey() {
+        return key;
+    }
+
+    @Exclude
+    public void setKey(String key) {
+        this.key = key;
     }
 }
