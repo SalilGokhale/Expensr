@@ -55,9 +55,9 @@
                 android:orientation="horizontal">
                 <ImageView
                     android:id="@+id/selector_arrow_batch"
-                    android:paddingLeft="@dimen/activity_horizontal_margin"
-                    android:paddingBottom="@dimen/activity_horizontal_margin"
-                    android:paddingTop="@dimen/activity_horizontal_margin"
+                    android:gravity="right"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="@dimen/spinner_padding"
                     android:src="@drawable/selector_arrows"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />

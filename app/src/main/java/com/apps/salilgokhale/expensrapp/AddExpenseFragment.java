@@ -142,57 +142,51 @@ public class AddExpenseFragment extends Fragment implements ButtonView, AdapterV
     @OnClick(R.id.hotel_button)
     public void addHotel(Button button){
         Log.d("Hotel button: ", "pressed!");
-        if (dataRecieved) {
-            if (batchesAvailable) {
-                buttonPresenter.onButtonClicked(0, spinnerAdapter.getItem(selectedPos).getKey());
-            }
-            else {
-                buttonPresenter.onButtonAddBatch(0);
-            }
-        }
-        else {
-            Snackbar snackbar = Snackbar.make(((MainActivity)getActivity()).getCoordinatorLayout(), "Error", Snackbar.LENGTH_SHORT);
-            snackbar.show();
-        }
+        buttonPress(0);
     }
 
     @OnClick(R.id.subs_button)
     public void addSubs(Button button){
         Log.d("Subs button: ", "pressed!");
-        if (dataRecieved) {
-            //buttonPresenter.onButtonClicked(1);
-        }
+        buttonPress(1);
     }
 
     @OnClick(R.id.dinner_button)
     public void addDinner(Button button){
         Log.d("Dinner button: ", "pressed!");
-        if (dataRecieved) {
-            //buttonPresenter.onButtonClicked(2);
-        }
+        buttonPress(2);
     }
 
     @OnClick(R.id.phone_button)
     public void addPhone(Button button){
         Log.d("Phone button: ", "pressed!");
-        if (dataRecieved) {
-            //buttonPresenter.onButtonClicked(3);
-        }
+        buttonPress(3);
     }
 
     @OnClick(R.id.train_button)
     public void addTrain(Button button){
         Log.d("Train button: ", "pressed!");
-        if (dataRecieved) {
-            //buttonPresenter.onButtonClicked(4);
-        }
+        buttonPress(4);
     }
 
     @OnClick(R.id.taxi_button)
     public void addTaxi(Button button){
         Log.d("Taxi button: ", "pressed!");
+        buttonPress(5);
+    }
+
+    public void buttonPress(int i){
         if (dataRecieved) {
-            //buttonPresenter.onButtonClicked(5);
+            if (batchesAvailable) {
+                buttonPresenter.onButtonClicked(i, spinnerAdapter.getItem(selectedPos).getKey());
+            }
+            else {
+                buttonPresenter.onButtonAddBatch(i);
+            }
+        }
+        else {
+            Snackbar snackbar = Snackbar.make(((MainActivity)getActivity()).getCoordinatorLayout(), "Error", Snackbar.LENGTH_SHORT);
+            snackbar.show();
         }
     }
 

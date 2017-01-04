@@ -1,6 +1,7 @@
 package com.apps.salilgokhale.expensrapp;
 
 import android.os.CountDownTimer;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -10,8 +11,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -26,8 +30,6 @@ public class ButtonPresenterImpl implements ButtonPresenter {
 
     private FirebaseDatabase mFirebaseDatabase; // the database - main access point
     private DatabaseReference mDatabaseReference; // class that references specific part of the database
-
-    private boolean connected = false;
 
     public ButtonPresenterImpl(ButtonView buttonView) {
 
@@ -45,31 +47,35 @@ public class ButtonPresenterImpl implements ButtonPresenter {
 
     @Override
     public void onButtonClicked(int i,  String batchID){
+        Map<String, Object> matchingBatch = new HashMap<>();
+        matchingBatch.put(batchID, true);
+        Expense expense = new Expense(returnParsedDate(), i, matchingBatch);
+
+        DatabaseReference db = mDatabaseReference.child("expenses").push();
+        db.setValue(expense);
+
+        updateBatchDatesTotalMatch(batchID, db.getKey());
+
         switch (i) {
             case 0:
                 Log.d("ButtonPresenter click: ", "hotel");
-                Map<String, Object> matchingBatch = new HashMap<>();
-                matchingBatch.put(batchID, true);
-                Expense expense = new Expense(returnParsedDate(), 0, matchingBatch);
-
-                DatabaseReference db = mDatabaseReference.child("expenses").push();
-                db.setValue(expense);
-
-            /*
+                break;
             case 1:
-                null;
+                Log.d("ButtonPresenter click: ", "phone");
+                break;
             case 2:
-                null;
+                Log.d("ButtonPresenter click: ", "train");
+                break;
             case 3:
-                null;
+                Log.d("ButtonPresenter click: ", "taxi");
+                break;
             case 4:
-                null;
+                Log.d("ButtonPresenter click: ", "subs");
+                break;
             case 5:
-                null;
-            case 6:
-                null; */
+                Log.d("ButtonPresenter click: ", "dinner");
+                break;
             default: break;
-
         }
     }
 
@@ -96,30 +102,18 @@ public class ButtonPresenterImpl implements ButtonPresenter {
         }
     }
 
+    private Date returnDate(){
+        return ((AddExpenseFragment) buttonView).getDate();
+    }
+
     @Override
     public void retrieveActiveBatches(){
 
         Query batchQuery = mDatabaseReference.child("batches").orderByChild("sap");
-        /*
-        new CountDownTimer(3000, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                //mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
-            }
-
-            public void onFinish() {
-                Log.d("Timer complete: ", "3 seconds!");
-                if (!connected){
-                    Log.d("ButtonPresenter: ", "No Batches Received");
-                    ((AddExpenseFragment) buttonView).setBatchesAvailable(false);
-                }
-            }
-        }.start(); */
 
         batchQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                connected = true;
                 if (buttonView != null){
                     Log.d("onChildAdded", "function called");
                     Batch batch = dataSnapshot.getValue(Batch.class);
@@ -160,6 +154,69 @@ public class ButtonPresenterImpl implements ButtonPresenter {
             }
         });
 
+    }
+
+    private void updateBatchDatesTotalMatch(final String batchID, final String expenseKey){
+        Log.d("updateBatchDates: ", "Entered");
+        ValueEventListener batchListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("Listener has", "received Snapshot");
+                Batch batch = dataSnapshot.getValue(Batch.class);
+                if (batch != null){
+                    Log.d("Batch:", "is not null");
+                    Log.d("BatchName", batch.getName());
+                    if (batch.getMatchingExpenses() != null){
+                        Log.d("Batch", "has matching expense");
+                        batch.getMatchingExpenses().put(expenseKey, true);
+                    }
+                    else {
+                        Log.d("Batch", "has not matching expense");
+                        Map<String, Object> matchingExpense = new HashMap<>();
+                        matchingExpense.put(expenseKey, true);
+                        batch.setMatchingExpenses(matchingExpense);
+                    }
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+                    sdf.setLenient(true);
+                    batch.setTotal(batch.getTotal()+1);
+
+                    Date date = new Date();
+                    String lastUpdate = sdf.format(date);
+                    batch.setLastAddedTo(lastUpdate);
+
+                    try {
+                        Date currentStartDate = sdf.parse(batch.getStartDate());
+                        Date currentEndDate = sdf.parse(batch.getEndDate());
+                        Date eDate = returnDate();
+                        if (currentStartDate.after(eDate)){
+                            // update the batch
+                            batch.setStartDate(sdf.format(eDate));
+                        }
+                        else if (currentEndDate.before(returnDate())){
+                            // update the batch
+                            batch.setEndDate(sdf.format(eDate));
+                        }
+
+                        mDatabaseReference.child("batches").child(batchID).setValue(batch);
+
+                    }
+                    catch (ParseException e2) {
+                        e2.printStackTrace();
+                        Log.d("Date:", "Error");
+                    }
+                }
+                else {
+                    Log.d("Batch:", "is null");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        mDatabaseReference.child("batches").child(batchID).addListenerForSingleValueEvent(batchListener);
     }
 
     @Override
