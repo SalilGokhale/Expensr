@@ -17,6 +17,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -135,12 +136,28 @@ public class ButtonPresenterImpl implements ButtonPresenter {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                if (buttonView != null) {
+                    List<Batch> batches = ((AddExpenseFragment) buttonView).getSpinnerAdapter().getBatchList();
+                    for (int i = 0; i < batches.size(); i++){
+                        if (dataSnapshot.getKey().equals(batches.get(i).getKey())){
+                            ((AddExpenseFragment) buttonView).getSpinnerAdapter().updateItem(i, dataSnapshot.getValue(Batch.class));
+                            break;
+                        }
+                    }
+                }
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                if (buttonView != null) {
+                    List<Batch> batches = ((AddExpenseFragment) buttonView).getSpinnerAdapter().getBatchList();
+                    for (int i = 0; i < batches.size(); i++){
+                        if (dataSnapshot.getKey().equals(batches.get(i).getKey())){
+                            ((AddExpenseFragment) buttonView).getSpinnerAdapter().removeItem(i);
+                            break;
+                        }
+                    }
+                }
             }
 
             @Override
@@ -185,26 +202,33 @@ public class ButtonPresenterImpl implements ButtonPresenter {
                     String lastUpdate = sdf.format(date);
                     batch.setLastAddedTo(lastUpdate);
 
-                    try {
-                        Date currentStartDate = sdf.parse(batch.getStartDate());
-                        Date currentEndDate = sdf.parse(batch.getEndDate());
-                        Date eDate = returnDate();
-                        if (currentStartDate.after(eDate)){
-                            // update the batch
-                            batch.setStartDate(sdf.format(eDate));
-                        }
-                        else if (currentEndDate.before(returnDate())){
-                            // update the batch
-                            batch.setEndDate(sdf.format(eDate));
-                        }
-
-                        mDatabaseReference.child("batches").child(batchID).setValue(batch);
-
+                    if (batch.getStartDate().equals("")) {
+                        batch.setStartDate(lastUpdate);
+                        batch.setEndDate(lastUpdate);
                     }
-                    catch (ParseException e2) {
-                        e2.printStackTrace();
-                        Log.d("Date:", "Error");
+                    else {
+
+                        try {
+
+                            Date currentStartDate = sdf.parse(batch.getStartDate());
+                            Date currentEndDate = sdf.parse(batch.getEndDate());
+                            Date eDate = returnDate();
+                            if (currentStartDate.after(eDate)) {
+                                // update the batch
+                                batch.setStartDate(sdf.format(eDate));
+                            } else if (currentEndDate.before(returnDate())) {
+                                // update the batch
+                                batch.setEndDate(sdf.format(eDate));
+                            }
+
+                        } catch (ParseException e2) {
+                            e2.printStackTrace();
+                            Log.d("Date:", "Error");
+                        }
                     }
+
+                    mDatabaseReference.child("batches").child(batchID).setValue(batch);
+
                 }
                 else {
                     Log.d("Batch:", "is null");

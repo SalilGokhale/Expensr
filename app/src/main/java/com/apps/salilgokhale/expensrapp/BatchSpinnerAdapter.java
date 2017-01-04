@@ -51,6 +51,16 @@ public class BatchSpinnerAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void updateItem(int i, Batch batch){
+        batchList.set(i, batch);
+        notifyDataSetChanged();
+    }
+
+    public void removeItem(int i){
+        batchList.remove(i);
+        notifyDataSetChanged();
+    }
+
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         view = inflter.inflate(R.layout.batch_spinner_item, null);
@@ -64,10 +74,7 @@ public class BatchSpinnerAdapter extends BaseAdapter {
         return view;
     }
 
-    /*
-    public void createNewBatch(){
-        Batch batch = new Batch("Create New Batch", "", "", 0, false, false);
-        addItem(batch);
-        newBatch = true;
-    } */
+    public List<Batch> getBatchList() {
+        return batchList;
+    }
 }

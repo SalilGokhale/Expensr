@@ -105,5 +105,20 @@ public class BatchesAdapter extends RecyclerView.Adapter<BatchesAdapter.ViewHold
         mDataset.add(batch);
         notifyDataSetChanged();
     }
+
+    public void updateItem(int i, Batch batch){
+        Log.d("BatchesAdapter", "value updated");
+        mDataset.set(i, batch);
+        notifyDataSetChanged();
+    }
+
+    public void removeItem(int i){
+        mDataset.remove(i);
+        notifyDataSetChanged();
+    }
+
+    public List<Batch> getmDataset() {
+        return mDataset;
+    }
 }
 

@@ -1,5 +1,7 @@
 package com.apps.salilgokhale.expensrapp;
 
+import android.util.Log;
+
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,8 +32,6 @@ public class BatchPresenterImpl implements BatchPresenter {
 
     }
 
-    // TODO retrieve batch list data from Firebase to pass to adapter
-
     public void requestBatches (){
 
         Query batchQuery = mDatabaseReference.child("batches").orderByChild("sap");
@@ -40,18 +40,39 @@ public class BatchPresenterImpl implements BatchPresenter {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if (batchView != null) {
-                    ((BatchesFragment) batchView).getmAdapter().addItem(dataSnapshot.getValue(Batch.class));
+                    Batch batch = dataSnapshot.getValue(Batch.class);
+                    batch.setKey(dataSnapshot.getKey());
+                    ((BatchesFragment) batchView).getmAdapter().addItem(batch);
                 }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                Log.d("onChildChanged", "activated");
+                if (batchView != null) {
+                    List<Batch> batches = ((BatchesFragment) batchView).getmAdapter().getmDataset();
+                    Log.d("onChildChanged", "batches retrieved");
+                    for (int i = 0; i < batches.size(); i++){
+                        Log.d("Batch number", String.valueOf(i));
+                        if (dataSnapshot.getKey().equals(batches.get(i).getKey())){
+                            ((BatchesFragment) batchView).getmAdapter().updateItem(i, dataSnapshot.getValue(Batch.class));
+                            break;
+                        }
+                    }
+                }
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                if (batchView != null) {
+                    List<Batch> batches = ((BatchesFragment) batchView).getmAdapter().getmDataset();
+                    for (int i = 0; i < batches.size(); i++){
+                        if (dataSnapshot.getKey().equals(batches.get(i).getKey())){
+                            ((BatchesFragment) batchView).getmAdapter().removeItem(i);
+                            break;
+                        }
+                    }
+                }
             }
 
             @Override

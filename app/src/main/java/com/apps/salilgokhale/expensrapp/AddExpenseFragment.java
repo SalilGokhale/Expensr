@@ -148,31 +148,31 @@ public class AddExpenseFragment extends Fragment implements ButtonView, AdapterV
     @OnClick(R.id.subs_button)
     public void addSubs(Button button){
         Log.d("Subs button: ", "pressed!");
-        buttonPress(1);
+        buttonPress(5);
     }
 
     @OnClick(R.id.dinner_button)
     public void addDinner(Button button){
         Log.d("Dinner button: ", "pressed!");
-        buttonPress(2);
+        buttonPress(6);
     }
 
     @OnClick(R.id.phone_button)
     public void addPhone(Button button){
         Log.d("Phone button: ", "pressed!");
-        buttonPress(3);
+        buttonPress(1);
     }
 
     @OnClick(R.id.train_button)
     public void addTrain(Button button){
         Log.d("Train button: ", "pressed!");
-        buttonPress(4);
+        buttonPress(2);
     }
 
     @OnClick(R.id.taxi_button)
     public void addTaxi(Button button){
         Log.d("Taxi button: ", "pressed!");
-        buttonPress(5);
+        buttonPress(3);
     }
 
     public void buttonPress(int i){
