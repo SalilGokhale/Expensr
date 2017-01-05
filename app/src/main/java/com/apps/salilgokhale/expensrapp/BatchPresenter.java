@@ -9,4 +9,6 @@ public interface BatchPresenter {
     void onDestroy();
 
     void requestBatches();
+
+    void updateSapBag(int SapBag, boolean isSet, String batchKey);
 }

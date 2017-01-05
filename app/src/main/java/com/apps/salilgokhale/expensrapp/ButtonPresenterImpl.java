@@ -138,9 +138,11 @@ public class ButtonPresenterImpl implements ButtonPresenter {
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 if (buttonView != null) {
                     List<Batch> batches = ((AddExpenseFragment) buttonView).getSpinnerAdapter().getBatchList();
+                    Batch batch = dataSnapshot.getValue(Batch.class);
+                    batch.setKey(dataSnapshot.getKey());
                     for (int i = 0; i < batches.size(); i++){
-                        if (dataSnapshot.getKey().equals(batches.get(i).getKey())){
-                            ((AddExpenseFragment) buttonView).getSpinnerAdapter().updateItem(i, dataSnapshot.getValue(Batch.class));
+                        if (batch.getKey().equals(batches.get(i).getKey())){
+                            ((AddExpenseFragment) buttonView).getSpinnerAdapter().updateItem(i, batch);
                             break;
                         }
                     }

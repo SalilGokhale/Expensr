@@ -16,6 +16,12 @@ import java.util.List;
 
 public class BatchesAdapter extends RecyclerView.Adapter<BatchesAdapter.ViewHolder> {
     private List<Batch> mDataset;
+    OnBatchElementClicker onBatchElementClicker;
+
+    public interface OnBatchElementClicker{
+        void onSapClicked(Boolean isSAP, String batchKey);
+        void onBagClicked(Boolean isBag, String batchKey);
+    }
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -71,7 +77,7 @@ public class BatchesAdapter extends RecyclerView.Adapter<BatchesAdapter.ViewHold
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
-        Batch temp = mDataset.get(position);
+        final Batch temp = mDataset.get(position);
 
         if (mDataset.size() != 0) {
             holder.mBatchNameTV.setText(temp.getName());
@@ -91,6 +97,23 @@ public class BatchesAdapter extends RecyclerView.Adapter<BatchesAdapter.ViewHold
             } else {
                 holder.mBag.setImageResource(R.drawable.bag_grey);
             }
+
+            holder.mSAP.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    onBatchElementClicker.onSapClicked(temp.isSap(), temp.getKey());
+
+                }
+            });
+
+            holder.mBag.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBatchElementClicker.onBagClicked(temp.isBag(), temp.getKey());
+                }
+            });
+
         }
 
     }
@@ -119,6 +142,10 @@ public class BatchesAdapter extends RecyclerView.Adapter<BatchesAdapter.ViewHold
 
     public List<Batch> getmDataset() {
         return mDataset;
+    }
+
+    public void setOnBatchElementClicker(OnBatchElementClicker onBatchElementClicker){
+        this.onBatchElementClicker = onBatchElementClicker;
     }
 }
 

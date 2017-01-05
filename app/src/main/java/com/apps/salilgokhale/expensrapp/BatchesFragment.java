@@ -25,7 +25,7 @@ import static android.support.design.R.attr.layoutManager;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BatchesFragment extends Fragment implements BatchView {
+public class BatchesFragment extends Fragment implements BatchView, BatchesAdapter.OnBatchElementClicker {
 
     @BindView(R.id.batch_recycler_view)
     RecyclerView recyclerView;
@@ -62,11 +62,12 @@ public class BatchesFragment extends Fragment implements BatchView {
         super.onViewCreated(view, savedInstanceState);
 
         mAdapter = new BatchesAdapter(batchList);
+        mAdapter.setOnBatchElementClicker(this);
+
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLinearLayoutManager);
         recyclerView.setAdapter(mAdapter);
         recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(VERTICAL_ITEM_SPACE));
-
 
         batchPresenter.requestBatches();
 
@@ -74,6 +75,16 @@ public class BatchesFragment extends Fragment implements BatchView {
 
     public BatchesAdapter getmAdapter() {
         return mAdapter;
+    }
+
+    @Override
+    public void onSapClicked(Boolean isSAP, String batchKey){
+        batchPresenter.updateSapBag(0, isSAP, batchKey);
+    }
+
+    @Override
+    public void onBagClicked(Boolean isBag, String batchKey){
+        batchPresenter.updateSapBag(1, isBag, batchKey);
     }
 
     @Override

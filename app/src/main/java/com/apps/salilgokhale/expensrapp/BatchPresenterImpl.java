@@ -52,10 +52,12 @@ public class BatchPresenterImpl implements BatchPresenter {
                 if (batchView != null) {
                     List<Batch> batches = ((BatchesFragment) batchView).getmAdapter().getmDataset();
                     Log.d("onChildChanged", "batches retrieved");
+                    Batch batch = dataSnapshot.getValue(Batch.class);
+                    batch.setKey(dataSnapshot.getKey());
                     for (int i = 0; i < batches.size(); i++){
                         Log.d("Batch number", String.valueOf(i));
-                        if (dataSnapshot.getKey().equals(batches.get(i).getKey())){
-                            ((BatchesFragment) batchView).getmAdapter().updateItem(i, dataSnapshot.getValue(Batch.class));
+                        if (batch.getKey().equals(batches.get(i).getKey())){
+                            ((BatchesFragment) batchView).getmAdapter().updateItem(i, batch);
                             break;
                         }
                     }
@@ -77,7 +79,7 @@ public class BatchPresenterImpl implements BatchPresenter {
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+                Log.d("OnChild Moved:", "called!");
             }
 
             @Override
@@ -89,7 +91,19 @@ public class BatchPresenterImpl implements BatchPresenter {
 
     }
 
-    // TODO pass changes from adapter back up to Firebase
+    public void updateSapBag(int SapBag, boolean isSet, String batchKey){
+        Log.d("batchKey:", batchKey);
+        switch (SapBag){
+            case 0:
+                mDatabaseReference.child("batches").child(batchKey).child("sap").setValue(!isSet);
+                break;
+            case 1:
+                mDatabaseReference.child("batches").child(batchKey).child("bag").setValue(!isSet);
+                break;
+            default:
+                break;
+        }
+    }
 
     @Override
     public void onDestroy(){
