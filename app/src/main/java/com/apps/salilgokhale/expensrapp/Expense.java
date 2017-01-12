@@ -11,12 +11,11 @@ import java.util.Map;
 
 public class Expense {
 
-    /*public enum eType {
-        Hotel, Train, Taxi, Subsistence, Phone, Dinner
-    } */
+    @Exclude
+    private String key;
 
     @Exclude
-    public String key;
+    private Date actualDate;
 
     private String receiptDate;
     private int expenseType;
@@ -56,30 +55,6 @@ public class Expense {
         this.matchingBatch = matchingBatch;
     }
 
-    /*
-    @Exclude
-    public eType getExpenseTypeAsEnum(){
-        return expenseType;
-    }
-
-    // these methods are just a Firebase 9.0.0 hack to handle the enum
-    public String getExpenseType(){
-        if (expenseType == null){
-            return null;
-        } else {
-            return expenseType.name();
-        }
-    }
-
-    public void setLifecycle(String expenseTypeString){
-        if (expenseTypeString == null){
-            expenseType = null;
-        } else {
-            this.expenseType = eType.valueOf(expenseTypeString);
-        }
-    }
-    */
-
     @Exclude
     public void setKey(String key) {
         this.key = key;
@@ -88,5 +63,15 @@ public class Expense {
     @Exclude
     public String getKey() {
         return key;
+    }
+
+    @Exclude
+    public Date getActualDate() {
+        return actualDate;
+    }
+
+    @Exclude
+    public void setActualDate(Date actualDate) {
+        this.actualDate = actualDate;
     }
 }

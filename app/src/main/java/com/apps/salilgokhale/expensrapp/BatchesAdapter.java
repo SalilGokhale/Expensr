@@ -1,5 +1,7 @@
 package com.apps.salilgokhale.expensrapp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +35,7 @@ public class BatchesAdapter extends RecyclerView.Adapter<BatchesAdapter.ViewHold
         public TextView mBatchTotalTV;
         public ImageView mSAP;
         public ImageView mBag;
+        private Context c;
 
         public ViewHolder(View v) {
             super(v);
@@ -42,11 +45,18 @@ public class BatchesAdapter extends RecyclerView.Adapter<BatchesAdapter.ViewHold
             mBatchTotalTV = (TextView) v.findViewById(R.id.total_exp_cv);
             mSAP = (ImageView) v.findViewById(R.id.sap_cv);
             mBag = (ImageView) v.findViewById(R.id.bag_cv);
+            c = v.getContext();
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d("Batch onClick", "pressed");
+
+                    String batchKey = (String) mBatchNameTV.getTag();
+                    Intent intent = new Intent(c, ViewBatchActivity.class);
+                    intent.putExtra("batchKey", batchKey);
+                    c.startActivity(intent);
+
                 }
             });
 
@@ -81,6 +91,7 @@ public class BatchesAdapter extends RecyclerView.Adapter<BatchesAdapter.ViewHold
 
         if (mDataset.size() != 0) {
             holder.mBatchNameTV.setText(temp.getName());
+            holder.mBatchNameTV.setTag(temp.getKey());
             if (!temp.getStartDate().isEmpty()) {
                 String date2date = temp.getStartDate() + " - " + temp.getEndDate();
                 holder.mBatchDateTV.setText(date2date);

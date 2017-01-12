@@ -229,37 +229,4 @@ public class MainActivity extends AppCompatActivity implements MainView, DatePic
         super.onDestroy();
     }
 
-    /*
-
-    Calendar c = Calendar.getInstance();
-        SimpleDateFormat format1 = new SimpleDateFormat("dd/M/YY");
-        String date = format1.format(c.getTime());
-        Expense.eType type = Expense.eType.Taxi;
-        Expense expenseTest = new Expense(date, type);
-
-        mDatabaseReference.push().setValue(expenseTest);
-
-        // Read from the database
-        mChildEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Expense expense = dataSnapshot.getValue(Expense.class);
-                Log.d("expense name read: ", expense.getReceiptDate());
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        };
-
-        mDatabaseReference.addChildEventListener(mChildEventListener);
-
-    */
-
-
 }
