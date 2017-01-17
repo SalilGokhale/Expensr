@@ -55,7 +55,7 @@ public class ExpenseExpandableAdapter extends ExpandableRecyclerAdapter<ExpenseE
     @Override
     public void onBindParentViewHolder(WeekParentViewHolder weekParentViewHolder, int i, ParentListItem parentListItem){
         Week week = (Week) parentListItem;
-        String weekName = "Week " + String.valueOf(i + 1);
+        String weekName = "Week " + String.valueOf(week.getRank() + 1);
         weekParentViewHolder.mWeekTextView.setText(weekName);
         //weekParentViewHolder.mWeekDateTextView.setText(week.getWeekDates());
     }

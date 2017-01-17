@@ -36,6 +36,7 @@ public class BatchTextView extends TextView {
         Typeface customFont = FontFactory.getTypeface("fonts/Helvetica-Light.ttf", context);
         setTypeface(customFont);
         this.setTextSize(getResources().getDimension(R.dimen.drawer_text_height));
+        this.setTextColor(ContextCompat.getColor(context, R.color.black));
     }
 
 }

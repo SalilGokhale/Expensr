@@ -1,6 +1,8 @@
 package com.apps.salilgokhale.expensrapp;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +29,7 @@ import java.util.Locale;
 public class ViewBatchPresenterImpl implements ViewBatchPresenter {
 
     private ViewBatchView viewBatchView;
+    private Context context;
 
     private FirebaseDatabase mFirebaseDatabase; // the database - main access point
     private DatabaseReference mDatabaseReference; // class that references specific part of the database
@@ -35,9 +38,10 @@ public class ViewBatchPresenterImpl implements ViewBatchPresenter {
     SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.ENGLISH);
     List<Week> weekList = new ArrayList<>();
 
-    public ViewBatchPresenterImpl(ViewBatchView viewBatchView) {
+    public ViewBatchPresenterImpl(ViewBatchView viewBatchView, Context context) {
 
         this.viewBatchView = viewBatchView;
+        this.context = context;
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
@@ -50,10 +54,15 @@ public class ViewBatchPresenterImpl implements ViewBatchPresenter {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Batch batch = dataSnapshot.getValue(Batch.class);
-                batch.setKey(dataSnapshot.getKey());
-                Log.d("Batch Retrieved", batch.getKey());
-                viewBatchView.setBatchItem(batch);
-
+                if (batch != null) {
+                    batch.setKey(dataSnapshot.getKey());
+                    Log.d("Batch Retrieved", batch.getKey());
+                    viewBatchView.setBatchItem(batch);
+                }
+                else {
+                    Toast toast = Toast.makeText(context, "Error, No batch retrieved1", Toast.LENGTH_LONG);
+                    toast.show();
+                }
             }
 
             @Override
@@ -130,6 +139,7 @@ public class ViewBatchPresenterImpl implements ViewBatchPresenter {
         Date expenseDate = expense.getActualDate();
 
         Log.d("addExpenseToWeek", "entered");
+        Log.d("Actual date", sdf.format(expenseDate));
         Calendar c = Calendar.getInstance();
         c.setTime(expense.getActualDate());
         int i = c.get(Calendar.DAY_OF_WEEK) - c.getFirstDayOfWeek();
@@ -139,6 +149,7 @@ public class ViewBatchPresenterImpl implements ViewBatchPresenter {
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
         Date startDate = c.getTime();
+        Log.d("Start date", sdf.format(startDate));
 
         if (weekList.size() == 0 || startDate.after(weekList.get(weekList.size()-1).getStartDate())) {
             Log.d("if function", "weeklist=0 || latestartdate");
@@ -160,6 +171,7 @@ public class ViewBatchPresenterImpl implements ViewBatchPresenter {
         else if (startDate.before(weekList.get(weekList.size()-1).getStartDate())){
             Log.d("if function", "earlystartdate");
             Log.d("weekList size", String.valueOf(weekList.size()));
+            Log.d("weekList start date:", sdf.format(weekList.get(weekList.size()-1).getStartDate()));
 
             c.add(Calendar.DATE, 6);
             Date endDate = c.getTime();
@@ -178,18 +190,19 @@ public class ViewBatchPresenterImpl implements ViewBatchPresenter {
             Log.d("weekList size", String.valueOf(weekList.size()));
             for (int j = 0; j < weekList.size(); j++){
                 if (startDate.equals(weekList.get(j).getStartDate())){
-
+                    Log.d("Expense has", "same week!");
+                    Log.d("weeklist start date", sdf.format(weekList.get(j).getStartDate()));
                     List<DayExpense> dayExpenseChildren = weekList.get(j).getChildItemList();
                     int childListLastIndex = dayExpenseChildren.size() - 1;
 
                     if (expenseDate.before(dayExpenseChildren.get(0).getDate())){
-
+                        Log.d("day", "before first");
                         weekList.get(j).getChildItemList().add(0, new DayExpense(expenseDate));
                         weekList.get(j).getChildItemList().add(1, new DayExpense(expense));
                         viewBatchView.getExpenseExpandableAdapter().notifyChildItemInserted(j, 0);
                     }
                     else if (expenseDate.after(dayExpenseChildren.get(childListLastIndex).getDate())){
-
+                        Log.d("day", "after last");
                         weekList.get(j).getChildItemList().add(new DayExpense(expenseDate));
                         weekList.get(j).getChildItemList().add(new DayExpense(expense));
                         viewBatchView.getExpenseExpandableAdapter().notifyChildItemInserted(j, childListLastIndex);
@@ -197,10 +210,11 @@ public class ViewBatchPresenterImpl implements ViewBatchPresenter {
                     else {
 
                         boolean dayPresent = false;
-                        for (int k = 1; k < childListLastIndex + 1; k++) {
+                        for (int k = 0; k < childListLastIndex + 1; k++) {
                             if (dayExpenseChildren.get(k).isDay){
 
                                 if (expenseDate.equals(dayExpenseChildren.get(k).getDate())){
+                                    Log.d("day", "is same!");
                                     weekList.get(j).getChildItemList().add(k+1, new DayExpense(expense));
                                     dayPresent = true;
                                     break;
@@ -223,8 +237,10 @@ public class ViewBatchPresenterImpl implements ViewBatchPresenter {
                             }
                         }
                         if (!dayPresent){
+                            Log.d("day", "wasn't present");
                             for (int l = 1; l < childListLastIndex + 1; l++){
                                 if (expenseDate.before(dayExpenseChildren.get(l).getDate())){
+                                    Log.d("day", "added before" + sdf.format(dayExpenseChildren.get(l).getDate()));
                                     weekList.get(j).getChildItemList().add(l, new DayExpense(expenseDate));
                                     weekList.get(j).getChildItemList().add(l+1, new DayExpense(expense));
                                     break;
@@ -236,6 +252,8 @@ public class ViewBatchPresenterImpl implements ViewBatchPresenter {
                 }
                 else if (j + 1 < weekList.size()){
                     if (startDate.before(weekList.get(j+1).getStartDate())){
+                        Log.d("Expense is", "before week" + String.valueOf(j+1));
+                        Log.d("weeklist start date +1", sdf.format(weekList.get(j).getStartDate()));
                         c.add(Calendar.DATE, 6);
                         Date endDate = c.getTime();
 
@@ -252,8 +270,15 @@ public class ViewBatchPresenterImpl implements ViewBatchPresenter {
                 }
             }
         }
+        updateWeekNumbers();
     }
 
+    private void updateWeekNumbers(){
+        for (int i = 0; i < weekList.size(); i++){
+            weekList.get(i).setRank(i);
+        }
+        viewBatchView.getExpenseExpandableAdapter().notifyDataSetChanged();
+    }
 
     @Override
     public List<Week> getWeekList() {

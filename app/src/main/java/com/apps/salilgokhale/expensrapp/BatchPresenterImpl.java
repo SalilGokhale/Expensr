@@ -42,7 +42,12 @@ public class BatchPresenterImpl implements BatchPresenter {
                 if (batchView != null) {
                     Batch batch = dataSnapshot.getValue(Batch.class);
                     batch.setKey(dataSnapshot.getKey());
-                    ((BatchesFragment) batchView).getmAdapter().addItem(batch);
+                    if (!batch.isSap()) {
+                        ((BatchesFragment) batchView).getmAdapter().addItemAtStart(batch);
+                    }
+                    else {
+                        ((BatchesFragment) batchView).getmAdapter().addItem(batch);
+                    }
                 }
             }
 

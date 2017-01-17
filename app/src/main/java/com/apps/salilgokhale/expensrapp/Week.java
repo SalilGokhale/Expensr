@@ -19,6 +19,7 @@ public class Week implements ParentListItem {
     private List<DayExpense> mChildItemList;
     private Date startDate;
     private Date endDate;
+    private int rank;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
 
     /**
@@ -63,5 +64,13 @@ public class Week implements ParentListItem {
 
     public String getWeekDates() {
         return weekDates;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
     }
 }
